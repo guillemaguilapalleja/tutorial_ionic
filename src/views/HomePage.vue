@@ -2,28 +2,27 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title class="ion-text-center">Calculator</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
+          <ion-title class="ion-text-center">Calculator</ion-title>
         </ion-toolbar>
       </ion-header>
-    
-      <div id="container">
-        <strong>Welcome to my Ionic tutorial</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+      <ion-button @click="isNumberDividableBy2">Place a number</ion-button>
+      <ion-input v-model="number"></ion-input>
+      <ion-button v-if="even" v-model="number">Congrats! Your number is even</ion-button>
+      <ion-button v-if="!even" v-model="number">Oops! Your number is not even</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput } from '@ionic/vue';
+import { defineComponent, ref, inject } from 'vue';
 
 export default defineComponent({
   name: 'HomePage',
@@ -32,7 +31,29 @@ export default defineComponent({
     IonHeader,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonButton,
+    IonInput
+  },
+  setup() {
+    let number = ref(0);
+    let even = ref(false);
+    let client = inject('mqttClient');
+
+    function isNumberDividableBy2(){
+      if (number.value % 2 == 0){
+        even.value = true;
+      }
+      else{
+        even.value = false;
+      }
+    }
+    return{
+      number,
+      even,
+      client,
+      isNumberDividableBy2
+    }
   }
 });
 </script>
